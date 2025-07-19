@@ -1,0 +1,57 @@
+<?php
+    class categoria{
+        public $conexion;
+        
+        public function __construct($conexion) {
+            $this->conexion = $conexion;
+        }
+
+        public function consulta() {
+            $con = "SELECT * FROM categoria ORDER BY nombre";
+            $res = mysqli_query($this->conexion, $con);
+            $vec = [];
+            while($row =  mysqli_fetch_assoc($res)) {
+                $vec[] = $row;
+            }
+            return $vec;
+        }
+
+        public function eliminar($id) {
+            $del = "DELETE FROM categoria WHERE id_categoria = $id";
+            mysqli_query($this->conexion, $del);
+            $vec = [];
+            $vec ["resultado"] = "ok";
+            $vec ["mensaje"] = "La categoria ha sido eliminada";
+            return $vec;
+        }
+
+        public function insertar($params) {
+            $ins = "INSERT INTO categoria(id_categoria, nombre) VALUES($params->id_categoria, '$params->nombre')";
+            mysqli_query($this->conexion, $ins);
+            $vec = [];
+            $vec ["resultado"] = "ok";
+            $vec ["mensaje"] = "La categoria ha sido guardada";
+            return $vec;
+        }
+
+        public function editar($id, $params) {
+            $editar = "UPDATE categoria SET id_categoria = $params->id_categoria, nombre = '$params->nombre' WHERE id_categoria = $id";
+            mysqli_query($this->conexion, $editar);
+            $vec = [];
+            $vec ["resultado"] = "ok";
+            $vec ["mensaje"] = "La categoria ha sido editada";
+            return $vec;
+        }
+
+        public function filtro($valor) {
+            $filtro = "SELECT * FROM categoria WHERE nombre LIKE '%$valor%'";
+            $res = mysqli_query($this->conexion, $filtro);
+            $vec = [];
+
+            while($row = mysqli_fetch_assoc($res)) {
+                $vec [] = $row;
+            }
+            return $vec;
+        }
+    }
+?>
