@@ -7,17 +7,14 @@
         }
 
         public function consulta() {
-            $con = "SELECT cl.*, pd.id_pedidos, pd.fecha_pedido, pd.subtotal, cr.id_credito, cr.total_credito, cr.fecha_credito, cr.estado
-            FROM cliente cl
-            LEFT JOIN pedidos pd ON cl.id_cliente = pd.fo_cliente
-            LEFT JOIN credito cr ON cl.id_cliente = cr.fo_cliente
-            ORDER BY cl.nombre";
+            $con = "SELECT * FROM cliente ORDER BY nombre";
             $res = mysqli_query($this->conexion, $con);
             $vec = [];
-            while($row = mysqli_fetch_array($res)) {
-                $vec[] = $row;
-            }
-            return $vec;
+            
+            while ($row = mysqli_fetch_array($res)) {
+             $vec[] = $row;
+         }
+             return $vec;
         }
             //http://localhost/Inventrack/backend/Controlador/cliente.php?control=consulta
         public function eliminar($id) {
@@ -30,8 +27,8 @@
         }
 
         public function insertar($params) {
-            $ins = "INSERT INTO cliente(Id_cliente, Nombre, Cedula, Direccion, Telefono, Celular, Email, fo_ciudad) 
-            VALUES($params->Id_cliente, '$params->nombre', '$params->Cedula', '$params->Direccion', $params->Telefono, $params->Celular, '$params->Email', $params->fo_ciudad)";
+            $ins = "INSERT INTO cliente(nombre, cedula, direccion, telefono, celular, email, fo_ciudad) 
+            VALUES('$params->nombre', '$params->cedula', '$params->direccion', $params->telefono, $params->celular, '$params->email', $params->fo_ciudad)";
             mysqli_query($this->conexion, $ins);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -40,9 +37,9 @@
         }
 
         public function editar($id, $params) {
-            $editar = "UPDATE cliente SET Id_cliente = $params->Id_cliente, Nombre = '$params->nombre', Cedula = '$params->Cedula', Direccion = '$params->Direccion', 
-            Telefono = $params->Telefono, Celular = $params->Celular, Email = '$params->Email', fo_ciudad = $params->fo_ciudad
-            WHERE Id_cliente = $id";       
+            $editar = "UPDATE cliente SET nombre = '$params->nombre', cedula = '$params->cedula', direccion = '$params->direccion', 
+            telefono = $params->telefono, celular = $params->celular, email = '$params->email', fo_ciudad = $params->fo_ciudad
+            WHERE id_cliente = $id";       
             mysqli_query($this->conexion, $editar);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -51,15 +48,15 @@
         }
 
         public function filtro($valor) {
-            $filtro = "SELECT cl.*, pd.id_pedidos, pd.fecha_pedido, pd.subtotal, cr.id_credito, cr.total_credito, cr.fecha_credito, cr.estado
+            $filtro = "SELECT 
             FROM cliente cl
-            LEFT JOIN pedidos pd ON cl.id_cliente = pd.fo_cliente
-            LEFT JOIN credito cr ON cl.id_cliente = cr.fo_cliente 
-            WHERE cl.nombre LIKE '%$valor%', OR cl.Cedula LIKE '%$valor%', OR pd.fecha_pedido LIKE '%$valor%', OR cr.estado LIKE '%$valor%'";
+            
+            WHERE nombre LIKE '%$valor%' 
+            ORDER BY nombre";
             $res = mysqli_query($this->conexion, $filtro);
             $vec = [];
 
-            while($row = mysqli_fetch_array($res)) {
+            while($row = mysqli_fetch_assoc($res)) {
                 $vec [] = $row;
             }
             return $vec;

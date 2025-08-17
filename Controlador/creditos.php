@@ -4,40 +4,38 @@
 
 
     require_once("../conexion.php");
-    require_once("../Modelo/usuario.php");
+    require_once("../Modelo/credito.php");
     $control = $_GET ['control'];
 
-    $usua = new usuario($conexion);
-    $vec = null; 
-    $control = isset($_GET['control']) ? $_GET['control'] : null;
+    $cr = new creditos($conexion);
 
     switch ($control) {
         case 'consulta':
-            $vec = $usua->consulta();
+            $vec = $cr->consulta();
         break;
 
         case 'insertar':
         $json = file_get_contents('php://input');
         //$json = '{"nombre": "Prueba"}';
         $params = json_decode($json);
-        $vec = $usua->insertar($params);
+        $vec = $cr->insertar($params);
         break;
 
         case 'eliminar':
             $id = $_GET['id'];
-            $vec = $usua->eliminar($id);
+            $vec = $cr->eliminar($id);
         break;
 
         case 'editar':
         $json = file_get_contents('php://input');
         $params = json_decode($json);
         $id = $_GET['id'];
-        $vec = $usua->editar($id, $params);
+        $vec = $cr->editar($id, $params);
         break;
 
         case 'filtro':
             $dato = $_GET['dato'];
-            $vec = $usua->filtro($dato);
+            $vec = $cr->filtro($dato);
         break;
     }
     

@@ -1,4 +1,6 @@
 <?php
+     ob_start();
+
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: Origin, X-Requested-with, Content-Type, Accept');
 
@@ -41,6 +43,6 @@
     
     //$datosJ = json_decode($ven);
     //echo $datosJ;
-    header('content-Type: application/json');
-    echo json_encode($vec);
+    header('Content-Type: application/json');
+    echo json_encode($vec, JSON_UNESCAPED_UNICODE);
 ?>

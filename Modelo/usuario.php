@@ -7,7 +7,7 @@
         }
 
         public function consulta() {
-            $con = "SELECT * FROM usuario ORDER BY nombre";
+            $con = "SELECT * FROM usuario ORDER BY Nombre";
            $res = mysqli_query($this->conexion, $con);
             $vec = [];
             while($row = mysqli_fetch_array($res)) {
@@ -17,7 +17,7 @@
         }
 
         public function eliminar($id) {
-            $del = "DELETE FROM usuario WHERE id_usuario = $id";
+            $del = "DELETE FROM usuario WHERE Id_usuario = $id";
             mysqli_query($this->conexion, $del);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -26,8 +26,8 @@
         }
 
         public function insertar($params) {
-            $ins = "INSERT INTO usuario(Id_usuario,nombre, Email, Contrasena) 
-            VALUES($params->Id_usuario, '$params->nombre', '$params->Email', '$params->Contrasena',)";
+            $ins = "INSERT INTO usuario(Nombre, Email, Contrasena) 
+            VALUES('$params->nombre', '$params->Email', '$params->Contrasena')";
             mysqli_query($this->conexion, $ins);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -36,7 +36,7 @@
         }
 
         public function editar($id, $params) {
-            $editar = "UPDATE usuario SET Id_usuario =$params->Id_usuario, nombre = '$params->nombre', Email = '$params->Email', Contrasena = '$params->Contrasena' WHERE id_usuario = $id";
+            $editar = "UPDATE usuario SET Nombre = '$params->Nombre', Email = '$params->Email', Contrasena = '$params->Contrasena' WHERE id_usuario = $id";
             mysqli_query($this->conexion, $editar);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -45,7 +45,7 @@
         }
 
         public function filtro($valor) {
-            $filtro = "SELECT * FROM usuario WHERE nombre LIKE '%$valor%'";
+            $filtro = "SELECT * FROM usuario WHERE Nombre LIKE '%$valor%'";
             $res = mysqli_query($this->conexion, $filtro);
             $vec = [];
 

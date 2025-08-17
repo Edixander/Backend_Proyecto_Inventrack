@@ -26,7 +26,8 @@
         }
 
         public function insertar($params) {
-            $ins = "INSERT INTO metodo_pago(Id_metodo_pago, metodo) VALUES($params->Id_metodo_pago, '$params->metodo')";
+            $ins = "INSERT INTO metodo_pago(metodo) 
+            VALUES('$params->metodo')";
             mysqli_query($this->conexion, $ins);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -35,7 +36,7 @@
         }
 
         public function editar($id, $params) {
-            $editar = "UPDATE metodo_pago SET Id_metodo_pago = $params->Id_metodo_pago, metodo = '$params->metodo' =  WHERE id_metodo_pago = $id";
+            $editar = "UPDATE metodo_pago SET metodo = '$params->metodo' =  WHERE id_metodo_pago = $id";
             mysqli_query($this->conexion, $editar);
             $vec = [];
             $vec ["resultado"] = "ok";

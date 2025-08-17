@@ -11,7 +11,7 @@
             FROM compras co
             INNER JOIN metodo_pago mp ON co.fo_metodo_pago = mp.id_metodo_pago
             INNER JOIN usuario us ON co.fo_usuario = us.id_usuario
-            ORDER BY co.Productos_comprados, co.id_compras";
+            ORDER BY co.producto_comprado, co.id_compras";
             $res = mysqli_query($this->conexion, $con);
             $vec = [];
             while($row = mysqli_fetch_array($res)) {
@@ -30,8 +30,8 @@
         }
 
         public function insertar($params) {
-            $ins = "INSERT INTO compras(Id_compras, Productos_comprados, fo_metodo_pago, Subtotal, Iva, Total, fo_usuario)
-            VALUES($params->Id_compras, '$params->Productos_comprados', $params->fo_metodo_pago, $params->Subtotal, '$params->Iva', $params->Total, $params->fo_usuario)";
+            $ins = "INSERT INTO compras(producto_comprado, fo_metodo_pago, subtotal, iva, total, fo_usuario)
+            VALUES('$params->producto_comprado', $params->fo_metodo_pago, $params->subtotal, '$params->iva', $params->total, $params->fo_usuario)";
             mysqli_query($this->conexion, $ins);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -40,7 +40,7 @@
         }
 
         public function editar($id, $params) {
-            $editar = "UPDATE compras SET Id_compras = $params->Id_compras, Productos_comprados = '$params->Productos_comprados', fo_metodo_pago = $params->fo_metodo_pago, Subtotal = $params->Subtotal, Iva = '$params->Iva', Total = $params->Total, fo_usuario =  $params->fo_usuario
+            $editar = "UPDATE compras SET producto_comprado = '$params->producto_comprado', fo_metodo_pago = $params->fo_metodo_pago, subtotal = $params->subtotal, iva = '$params->iva', total = $params->total, fo_usuario =  $params->fo_usuario
             WHERE id_compras = $id";
             mysqli_query($this->conexion, $editar);
             $vec = [];
@@ -54,7 +54,7 @@
             FROM compras co
             INNER JOIN metodo_pago mp ON co.fo_metodo_pago = mp.id_metodo_pago
             INNER JOIN usuario us ON co.fo_usuario = us.id_usuario
-            WHERE co.Productos_comprados LIKE '%$valor%' OR mp.metodo LIKE '%$valor%' OR us.nombre LIKE '%$valor%'";
+            WHERE co.producto_comprado LIKE '%$valor%' OR mp.metodo LIKE '%$valor%' OR us.nombre LIKE '%$valor%'";
             $res = mysqli_query($this->conexion, $filtro);
             $vec = [];
 

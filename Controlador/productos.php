@@ -1,6 +1,7 @@
 <?php
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: Origin, X-Requested-with, Content-Type, Accept');
+    header('content-Type: application/json');
 
 
     require_once("../conexion.php");
@@ -41,6 +42,6 @@
     
     //$datosJ = json_decode($ven);
     //echo $datosJ;
-    header('content-Type: application/json');
+   
     echo json_encode($vec);
 ?>

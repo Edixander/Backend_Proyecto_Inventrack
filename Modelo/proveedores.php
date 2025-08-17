@@ -1,5 +1,5 @@
 <?php
-    class proveedor{
+    class proveedores{
         public $conexion;
 
         public function __construct($conexion) {
@@ -7,7 +7,7 @@
         }
 
         public function consulta() {
-            $con = "SELECT * FROM proveedor ORDER BY Razon_social";
+            $con = "SELECT * FROM proveedores ORDER BY Razon_social";
            $res = mysqli_query($this->conexion, $con);
             $vec = [];
             while($row = mysqli_fetch_assoc($res)) {
@@ -17,7 +17,7 @@
         }
 
         public function eliminar($id) {
-            $del = "DELETE FROM proveedor WHERE id_proveedor = $id";
+            $del = "DELETE FROM proveedores WHERE id_proveedor = $id";
             mysqli_query($this->conexion, $del);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -26,8 +26,8 @@
         }
 
         public function insertar($params) {
-            $ins = "INSERT INTO proveedor(Id_proveedor, Nit, Razon_social, Direccion, Celular, Telefono, Email, fo_ciudad) 
-            VALUES($params->Id_proveedor, '$params->Nit', '$params->Razon_social', '$params->Direccion', '$params->Celular', '$params->Telefono', '$params->Email', $params->fo_ciudad)";
+            $ins = "INSERT INTO proveedores( Nit, Razon_social, Direccion, Celular, Telefono, Email, fo_ciudad) 
+            VALUES('$params->Nit', '$params->Razon_social', '$params->Direccion', '$params->Celular', '$params->Telefono', '$params->Email', $params->fo_ciudad)";
             mysqli_query($this->conexion, $ins);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -36,7 +36,7 @@
         }
 
         public function editar($id, $params) {
-            $editar = "UPDATE proveedor SET Id_proveedor = $params->Id_proveedor, Nit = '$params->Nit', Razon_social = '$params->Razon_social', Direccion = '$params->Direccion', Celular = '$params->Celular', Telefono = '$params->Telefono', Email = '$params->Email', fo_ciudad = $params->fo_ciudad 
+            $editar = "UPDATE proveedores SET Nit = '$params->Nit', Razon_social = '$params->Razon_social', Direccion = '$params->Direccion', Celular = '$params->Celular', Telefono = '$params->Telefono', Email = '$params->Email', fo_ciudad = $params->fo_ciudad 
             WHERE id_proveedor = $id";
             mysqli_query($this->conexion, $editar);
             $vec = [];
@@ -46,7 +46,7 @@
         }
 
         public function filtro($valor) {
-            $filtro = "SELECT * FROM proveedor WHERE Razon_social LIKE '%$valor%'";
+            $filtro = "SELECT * FROM proveedores WHERE Razon_social LIKE '%$valor%'";
             $res = mysqli_query($this->conexion, $filtro);
             $vec = [];
 

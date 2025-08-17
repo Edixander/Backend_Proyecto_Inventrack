@@ -7,7 +7,7 @@
         }
 
         public function consulta() {
-            $con = "SELECT * FROM departamento ORDER BY nombre";
+            $con = "SELECT * FROM departamento ORDER BY nombre_departamento";
             $res = mysqli_query($this->conexion, $con);
             $vec = [];
             while($row = mysqli_fetch_array($res)) {
@@ -17,7 +17,7 @@
         }
 
         public function eliminar($id) {
-            $del = "DELETE FROM departamento WHERE id_dpto = $id";
+            $del = "DELETE FROM departamento WHERE id_departamento = $id";
             mysqli_query($this->conexion, $del);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -26,7 +26,7 @@
         }
 
         public function insertar($params) {
-            $ins = "INSERT INTO departamento(nombre) VALUES('$params->nombre')";
+            $ins = "INSERT INTO departamento(nombre_departamento) VALUES('$params->nombre_departamento')";
             mysqli_query($this->conexion, $ins);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -35,7 +35,7 @@
         }
 
         public function editar($id, $params) {
-            $editar = "UPDATE departamento SET nombre = '$params->nombre' =  WHERE id_departamento = $id";
+            $editar = "UPDATE departamento SET nombre_departamento = '$params->nombre_departamento' =  WHERE id_departamento = $id";
             mysqli_query($this->conexion, $editar);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -44,7 +44,7 @@
         }
 
         public function filtro($valor) {
-            $filtro = "SELECT * FROM departamento WHERE nombre LIKE '%$valor%'";
+            $filtro = "SELECT * FROM departamento WHERE nombre_departamento LIKE '%$valor%'";
             $res = mysqli_query($this->conexion, $filtro);
             $vec = [];
 

@@ -1,5 +1,5 @@
 <?php
-    class credito{
+    class creditos{
         public $conexion;
 
         public function __construct($conexion) {
@@ -8,7 +8,7 @@
 
         public function consulta() {
             $con = "SELECT cr.*, cl.nombre AS cliente, pd.fecha_pedido  
-            FROM credito cr
+            FROM creditos cr
             LEFT JOIN cliente cl ON cr.fo_cliente = cl.id_cliente
             LEFT JOIN pedidos pd ON cr.fo_pedidos = pd.id_pedidos 
             ORDER BY cr.id_credito DESC";
@@ -21,7 +21,7 @@
         }
 
         public function eliminar($id) {
-            $del = "DELETE FROM credito WHERE id_credito = $id";
+            $del = "DELETE FROM creditos WHERE id_credito = $id";
             mysqli_query($this->conexion, $del);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -30,8 +30,8 @@
         }
 
         public function insertar($params) {
-            $ins = "INSERT INTO credito(id_credito, fo_cliente, fo_pedidos, total_credito, fecha_credito, estado) 
-            VALUES($params->id_credito, $params->fo_cliente, $params->fo_pedidos, $params->total_credito, '$params->fecha_credito', '$params->estado')";
+            $ins = "INSERT INTO creditos(fo_cliente, fo_pedidos, total_credito, fecha_credito, estado) 
+            VALUES($params->fo_cliente, $params->fo_pedidos, $params->total_credito, '$params->fecha_credito', '$params->estado')";
             mysqli_query($this->conexion, $ins);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -40,7 +40,7 @@
         }
 
         public function editar($id, $params) {
-            $editar = "UPDATE credito SET id_credito = $params->id_credito, fo_cliente = $params->fo_cliente, fo_pedidos = $params->fo_pedidos, total_credito = $params->total_credito, fecha_credito = '$params->fecha_credito', estado = '$params->estado'
+            $editar = "UPDATE creditos SET fo_cliente = $params->fo_cliente, fo_pedidos = $params->fo_pedidos, total_credito = $params->total_credito, fecha_credito = '$params->fecha_credito', estado = '$params->estado'
             WHERE id_credito = $id";     
             mysqli_query($this->conexion, $editar);
             $vec = [];
@@ -51,7 +51,7 @@
 
         public function filtro($valor) {
             $filtro = "SELECT cr.*, cl.nombre AS cliente, pd.fecha_pedido  
-            FROM credito cr
+            FROM creditos cr
             LEFT JOIN cliente cl ON cr.fo_cliente = cl.id_cliente
             LEFT JOIN pedidos pd ON cr.fo_pedidos = pd.id_pedidos  
             WHERE id_credito LIKE '%$valor%' OR cl.nombre LIKE '%$valor%' OR pd.fecha_pedido LIKE '%$valor%'";

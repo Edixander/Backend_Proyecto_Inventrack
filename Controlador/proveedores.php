@@ -4,10 +4,10 @@
 
 
     require_once("../conexion.php");
-    require_once("../Modelo/proveedor.php");
+    require_once("../Modelo/proveedores.php");
     $control = $_GET ['control'];
 
-    $prov = new proveedor($conexion);
+    $prov = new proveedores($conexion);
 
     switch ($control) {
         case 'consulta':
