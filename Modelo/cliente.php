@@ -7,11 +7,15 @@
         }
 
         public function consulta() {
-            $con = "SELECT * FROM cliente ORDER BY nombre";
+            $con = "SELECT cl.id_cliente, cl.nombre, cl.cedula, cl.direccion, 
+                   cl.telefono, cl.celular, cl.email, ci.nombre_ciudad AS ciudad
+                    FROM cliente cl
+                    LEFT JOIN ciudad ci ON cl.fo_ciudad = ci.id_ciudad
+                    ORDER BY cl.id_cliente DESC";
             $res = mysqli_query($this->conexion, $con);
             $vec = [];
             
-            while ($row = mysqli_fetch_array($res)) {
+            while ($row = mysqli_fetch_assoc($res)) {
              $vec[] = $row;
          }
              return $vec;

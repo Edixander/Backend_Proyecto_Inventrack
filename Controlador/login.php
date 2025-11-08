@@ -1,19 +1,27 @@
 <?php
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Headers: Origin, X-Requested-with, Content-Type, Accept');
-    header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: *");
+header("Content-Type: application/json");
 
-    require_once("../conexion.php");
-    require_once("../Modelo/login.php");
- 
-    $Email = $_GET['Email'] ?? $_GET['email'] ?? '';
-    $Contrasena = $_GET['Contrasena'] ?? $_GET['contrasena'] ?? '';
+require_once("../conexion.php");
+require_once("../Modelo/login.php");
 
-    $login = new Login($conexion);
+$Email = '';
+$Contrasena = '';
 
-    $vec = $login->consulta($Email, $Contrasena);
-    
-    //$datosJ = json_decode($ven);
-    //echo $datosJ;
-    echo json_encode($vec);
+$params = json_decode(file_get_contents("php://input"));
+
+if ($params && isset($params->Email) && isset($params->Contrasena)) {
+    $Email = $params->Email;
+    $Contrasena = $params->Contrasena;
+} else {
+    $Email = $_GET['email'] ?? '';
+    $Contrasena = $_GET['contrasena'] ?? '';
+}
+
+$login = new login($conexion);
+$vec = $login->consulta($Email, $Contrasena);
+
+echo json_encode($vec, JSON_UNESCAPED_UNICODE);
 ?>

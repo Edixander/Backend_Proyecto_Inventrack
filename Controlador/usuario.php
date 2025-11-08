@@ -1,6 +1,7 @@
 <?php
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: Origin, X-Requested-with, Content-Type, Accept');
+    header('content-Type: application/json');
 
 
     require_once("../conexion.php");
@@ -17,10 +18,12 @@
         break;
 
         case 'insertar':
-        $json = file_get_contents('php://input');
-        //$json = '{"nombre": "Prueba"}';
-        $params = json_decode($json);
-        $vec = $usua->insertar($params);
+            $params = json_decode(file_get_contents('php://input'));
+        if (!$params || !is_object($params)) {
+            $vec = ["resultado" => "error", "mensaje" => "JSON no llegó"];
+        } else {
+            $vec = $usua->insertar($params);
+        }
         break;
 
         case 'eliminar':
@@ -31,8 +34,16 @@
         case 'editar':
         $json = file_get_contents('php://input');
         $params = json_decode($json);
-        $id = $_GET['id'];
-        $vec = $usua->editar($id, $params);
+        if (!$params) {
+            $params = (object) $_POST;
+        }
+
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            $vec = ["resultado"=>"error","mensaje"=>"No se recibió ID"];
+        } else {
+            $vec = $usua->editar($id, $params);
+        }
         break;
 
         case 'filtro':
@@ -43,6 +54,6 @@
     
     //$datosJ = json_decode($ven);
     //echo $datosJ;
-    header('content-Type: application/json');
+   
     echo json_encode($vec);
 ?>

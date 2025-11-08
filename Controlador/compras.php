@@ -5,7 +5,7 @@
 
     require_once("../conexion.php");
     require_once("../Modelo/compras.php");
-    $control = $_GET ['control'];
+    $control = $_GET['control'] ?? '';
 
     $com = new compras($conexion);
 

@@ -1,26 +1,29 @@
 <?php
-    class login {
-        public $conexion;
+class login {
+    public $conexion;
 
-        public function __construct($conexion) {
-            $this->conexion = $conexion;
-        }
-
-        public function consulta($Email, $Contrasena) {
-            $con = "SELECT * FROM usuario WHERE email = '$Email' && contrasena = sha1('$Contrasena')";
-            $res = mysqli_query($this->conexion, $con);
-            $vec = [];
-
-            while ($row = mysqli_fetch_assoc($res)) {
-                $vec[] = $row;
-            }
-
-            if ($vec) {
-                $vec[] = ["validar" => "no validar"];
-            } else {
-                $vec[0]['validar']="valida";
-            }
-            return $vec;
-        }
+    public function __construct($conexion) {
+        $this->conexion = $conexion;
     }
+
+    public function consulta($Email, $Contrasena) {
+        $con = "SELECT * FROM usuario WHERE Email = '$Email'";
+        $res = mysqli_query($this->conexion, $con);
+
+        $vec = [];
+
+        if ($row = mysqli_fetch_assoc($res)) {
+            if (password_verify($Contrasena, $row['Contrasena'])) {
+                $row['validar'] = 'valida';
+            } else {
+                $row['validar'] = 'no validar';
+            }
+            $vec[] = $row;
+        } else {
+            $vec[] = ['validar'=>'no validar'];
+        }
+
+        return $vec;
+    }
+}
 ?>

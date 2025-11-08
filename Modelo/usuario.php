@@ -8,9 +8,9 @@
 
         public function consulta() {
             $con = "SELECT * FROM usuario ORDER BY Nombre";
-           $res = mysqli_query($this->conexion, $con);
+            $res = mysqli_query($this->conexion, $con);
             $vec = [];
-            while($row = mysqli_fetch_array($res)) {
+            while($row = mysqli_fetch_assoc($res)) {
                 $vec[] = $row;
             }
             return $vec;
@@ -26,17 +26,29 @@
         }
 
         public function insertar($params) {
-            $ins = "INSERT INTO usuario(Nombre, Email, Contrasena) 
-            VALUES('$params->nombre', '$params->Email', '$params->Contrasena')";
-            mysqli_query($this->conexion, $ins);
-            $vec = [];
-            $vec ["resultado"] = "ok";
-            $vec ["mensaje"] = "El usuario ha sido guardado";
-            return $vec;
-        }
+            $passwordHash = password_hash($params->Contrasena, PASSWORD_DEFAULT);
+            $ins = "INSERT INTO usuario(Identificacion, Nombre, Direccion, Celular, Email, Rol, Contrasena) 
+            VALUES('$params->Identificacion', '$params->Nombre', '$params->Direccion', '$params->Celular', '$params->Email', '$params->Rol', '$passwordHash')";
+            
+            $resultado = mysqli_query($this->conexion, $ins);
+    
+    $vec = [];
+    
+    if ($resultado) {
+        $vec ["resultado"] = "ok";
+        $vec ["mensaje"] = "El usuario ha sido guardado";
+    } else {
+        $vec ["resultado"] = "error";
+        $vec ["mensaje"] = "Error: " . mysqli_error($this->conexion);
+    }
+
+    return $vec; 
+}
 
         public function editar($id, $params) {
-            $editar = "UPDATE usuario SET Nombre = '$params->Nombre', Email = '$params->Email', Contrasena = '$params->Contrasena' WHERE id_usuario = $id";
+            $passwordHash = password_hash($params->Contrasena, PASSWORD_DEFAULT);
+            $editar = "UPDATE usuario SET Identificacion = '$params->Identificacion', Nombre = '$params->Nombre', Direccion = '$params->Direccion', Celular = $params->Celular, Email = '$params->Email', Rol = '$params->Rol', Contrasena = '$passwordHash'
+            WHERE Id_usuario = $id";
             mysqli_query($this->conexion, $editar);
             $vec = [];
             $vec ["resultado"] = "ok";

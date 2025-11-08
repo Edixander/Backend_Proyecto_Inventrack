@@ -7,15 +7,19 @@
         }
 
         public function consulta() {
-            $con = "SELECT pd.*, cl.nombre AS cliente, mp.metodo AS metodo_pago, us.nombre AS usuario 
-            FROM pedidos pd
-            INNER JOIN cliente cl ON pd.fo_cliente = cl.id_cliente
-            INNER JOIN metodo_pago mp ON pd.fo_metodo_pago = mp.id_metodo_pago 
-            INNER JOIN usuario us ON pd.fo_usuario = us.Id_usuario 
-            ORDER BY pd.id_pedidos DESC";
+            $con = "SELECT pd.id_pedidos, pd.lista_productos, pd.fecha_pedido, 
+                        pd.subtotal, 
+                        cl.nombre AS cliente, 
+                        mp.metodo AS metodo_pago, 
+                        us.nombre AS usuario 
+                FROM pedidos pd
+                LEFT JOIN cliente cl ON pd.fo_cliente = cl.id_cliente
+                LEFT JOIN metodo_pago mp ON pd.fo_metodo_pago = mp.id_metodo_pago 
+                LEFT JOIN usuario us ON pd.fo_usuario = us.Id_usuario 
+                ORDER BY pd.id_pedidos DESC";
             $res = mysqli_query($this->conexion, $con);
             $vec = [];
-            while($row = mysqli_fetch_array($res)) {
+            while($row = mysqli_fetch_assoc($res)) {
                 $vec[] = $row;
             }
             return $vec;
@@ -31,8 +35,9 @@
         }
 
         public function insertar($params) {
+            $fo_cliente = isset($params->fo_cliente) && $params->fo_cliente !== "" ? $params->fo_cliente : "NULL";
             $ins = "INSERT INTO pedidos(lista_productos, fecha_pedido, fo_cliente, fo_metodo_pago, subtotal, fo_usuario) 
-            VALUES('$params->lista_productos', '$params->fecha_pedido', $params->fo_cliente, $params->fo_metodo_pago, $params->subtotal, $params->fo_usuario";
+            VALUES('$params->lista_productos', '$params->fecha_pedido', $fo_cliente, $params->fo_metodo_pago, $params->subtotal, $params->fo_usuario)";
             mysqli_query($this->conexion, $ins);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -53,9 +58,9 @@
         public function filtro($valor) {
             $filtro = "SELECT pd.*, cl.nombre AS cliente, mp.metodo AS metodo_pago, us.nombre AS usuario 
             FROM pedidos pd
-            INNER JOIN cliente cl ON pd.fo_cliente = cl.id_cliente
-            INNER JOIN metodo_pago mp ON pd.fo_metodo_pago = mp.id_metodo_pago 
-            INNER JOIN usuario us ON pd.fo_usuario = us.Id_usuario  
+            LEFT JOIN cliente cl ON pd.fo_cliente = cl.id_cliente
+            LEFT JOIN metodo_pago mp ON pd.fo_metodo_pago = mp.id_metodo_pago 
+            LEFT JOIN usuario us ON pd.fo_usuario = us.Id_usuario  
             WHERE cl.nombre LIKE '%$valor%' OR mp.metodo LIKE '%$valor%' OR dp.id_pedidos LIKE '%$valor%'";
             $res = mysqli_query($this->conexion, $filtro);
             $vec = [];

@@ -13,29 +13,8 @@
         case 'consulta':
             $vec = $meto->consulta();
         break;
-
-        case 'insertar':
-        $json = file_get_contents('php://input');
-        //$json = '{"nombre": "Prueba"}';
-        $params = json_decode($json);
-        $vec = $meto->insertar($params);
-        break;
-
-        case 'eliminar':
-            $id = $_GET['id'];
-            $vec = $meto->eliminar($id);
-        break;
-
-        case 'editar':
-        $json = file_get_contents('php://input');
-        $params = json_decode($json);
-        $id = $_GET['id'];
-        $vec = $meto->editar($id, $params);
-        break;
-
-        case 'filtro':
-            $dato = $_GET['dato'];
-            $vec = $meto->filtro($dato);
+        default:
+            $vec = ["error" => "Control no válido"];
         break;
     }
     
