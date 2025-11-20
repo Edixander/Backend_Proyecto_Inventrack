@@ -7,9 +7,8 @@
         }
 
         public function consulta() {
-            $con = "SELECT v.*, pd.id_pedidos, us.nombre AS usuario, mp.metodo AS metodo_pago
+            $con = "SELECT v.*,us.nombre AS usuario, mp.metodo AS metodo_pago
             FROM ventas v
-            LEFT JOIN pedidos pd ON v.fo_pedidos = pd.id_pedidos
             LEFT JOIN usuario us ON v.fo_usuario = us.Id_usuario
             LEFT JOIN metodo_pago mp ON v.fo_metodo_pago = mp.id_metodo_pago
             ORDER BY v.id_ventas DESC";
@@ -33,7 +32,7 @@
         public function insertar($params) {
         error_log("Datos recibidos en PHP: " . print_r($params, true));
 
-        $fo_pedidos = isset($params->fo_pedidos) && $params->fo_pedidos != 0 ? $params->fo_pedidos : "NULL";
+        
 
         $iva = isset($params->iva) ? $params->iva : 0;
         $total = isset($params->total) ? $params->total : 0;
@@ -43,8 +42,8 @@
         $estado_venta = isset($params->estado_venta) ? $params->estado_venta : '';
         $observaciones = isset($params->observaciones) ? $params->observaciones : '';
 
-        $ins = "INSERT INTO ventas(fo_pedidos, iva, total, fo_usuario, fo_metodo_pago, fecha_venta, estado_venta, observaciones) 
-        VALUES($fo_pedidos, $params->iva, $params->total, $params->fo_usuario, $params->fo_metodo_pago, '$params->fecha_venta', '$params->estado_venta', '$params->observaciones')";
+        $ins = "INSERT INTO ventas(iva, total, fo_metodo_pago, fecha_venta, estado_venta, observaciones) 
+        VALUES($params->iva, $params->total, $params->fo_usuario, $params->fo_metodo_pago, '$params->fecha_venta', '$params->estado_venta', '$params->observaciones')";
        error_log("Consulta INSERT venta: $ins");
        $venta_resultado = mysqli_query($this->conexion, $ins);
 
@@ -106,7 +105,7 @@
     }
 
         public function editar($id, $params) {
-            $editar = "UPDATE ventas SET fo_pedidos = $params->fo_pedidos, iva = $params->iva, total = $params->total, fo_usuario = $params->fo_usuario,  fo_metodo_pago = $params->fo_metodo_pago, fecha_venta = '$params->fecha_venta', estado_venta = '$params->estado_venta', observaciones = '$params->observaciones'
+            $editar = "UPDATE ventas SET iva = $params->iva, total = $params->total, fo_usuario = $params->fo_usuario,  fo_metodo_pago = $params->fo_metodo_pago, fecha_venta = '$params->fecha_venta', estado_venta = '$params->estado_venta', observaciones = '$params->observaciones'
             WHERE id_ventas = $id";
             mysqli_query($this->conexion, $editar);
             $vec = [];
@@ -116,12 +115,11 @@
         }
 
         public function filtro($valor) {
-            $filtro = "SELECT v.*, pd.id_pedidos, us.nombre AS usuario, mp.metodo AS metodo_pago
+            $filtro = "SELECT v.*,us.nombre AS usuario, mp.metodo AS metodo_pago
             FROM ventas v
-            LEFT JOIN pedidos pd ON v.fo_pedidos = pd.id_pedidos
             LEFT JOIN usuario us ON v.fo_usuario = us.Id_usuario
             LEFT JOIN metodo_pago mp ON v.fo_metodo_pago = mp.id_metodo_pago
-            WHERE us.nombre LIKE '%$valor%' OR pd.id_pedidos LIKE '%$valor%' OR v.id_ventas LIKE '%$valor%'  OR mp.Metodo LIKE '%$valor%'";
+            WHERE us.nombre LIKE '%$valor%' OR v.id_ventas LIKE '%$valor%'  OR mp.Metodo LIKE '%$valor%'";
             $res = mysqli_query($this->conexion, $filtro);
             $vec = [];
 

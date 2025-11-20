@@ -18,6 +18,8 @@
         $json = file_get_contents('php://input');
         //$json = '{"nombre": "Prueba"}';
         $params = json_decode($json);
+        $texto_arreglo = serialize($params->productos);
+        $params->productos = $texto_arreglo;
         $vec = $ped->insertar($params);
         break;
 

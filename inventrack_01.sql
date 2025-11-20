@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 08-11-2025 a las 04:55:48
+-- Tiempo de generación: 20-11-2025 a las 04:46:14
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -171,7 +171,6 @@ INSERT INTO `compras` (`id_compras`, `producto_comprado`, `fo_metodo_pago`, `sub
 CREATE TABLE `creditos` (
   `id_credito` int(11) NOT NULL,
   `fo_cliente` int(11) NOT NULL,
-  `fo_pedidos` int(11) DEFAULT NULL,
   `descripcion` varchar(255) DEFAULT NULL,
   `total_credito` decimal(10,2) NOT NULL,
   `fecha_credito` date NOT NULL,
@@ -182,9 +181,9 @@ CREATE TABLE `creditos` (
 -- Volcado de datos para la tabla `creditos`
 --
 
-INSERT INTO `creditos` (`id_credito`, `fo_cliente`, `fo_pedidos`, `descripcion`, `total_credito`, `fecha_credito`, `estado_credito`) VALUES
-(2, 1, NULL, 'Fiado: 2 pantalones', 120000.00, '2025-09-20', 'Pendiente'),
-(4, 3, NULL, 'Chaqueta Azul', 95000.00, '2025-10-22', 'Pendiente');
+INSERT INTO `creditos` (`id_credito`, `fo_cliente`, `descripcion`, `total_credito`, `fecha_credito`, `estado_credito`) VALUES
+(1, 1, 'Fiado: 2 pantalones', 120000.00, '2025-09-20', 'Pendiente'),
+(2, 3, 'Chaqueta Azul', 95000.00, '2025-10-22', 'Pendiente');
 
 -- --------------------------------------------------------
 
@@ -323,32 +322,6 @@ INSERT INTO `metodo_pago` (`id_metodo_pago`, `metodo`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pedidos`
---
-
-CREATE TABLE `pedidos` (
-  `id_pedidos` int(11) NOT NULL,
-  `lista_productos` text NOT NULL,
-  `fecha_pedido` date NOT NULL,
-  `fo_cliente` int(11) DEFAULT NULL,
-  `fo_metodo_pago` int(11) NOT NULL,
-  `subtotal` decimal(10,2) NOT NULL,
-  `fo_usuario` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `pedidos`
---
-
-INSERT INTO `pedidos` (`id_pedidos`, `lista_productos`, `fecha_pedido`, `fo_cliente`, `fo_metodo_pago`, `subtotal`, `fo_usuario`) VALUES
-(1, 'Manzanas, Queso', '2025-08-28', 3, 5, 15000.00, 1),
-(2, 'Queso', '2025-08-28', 1, 1, 12000.00, 1),
-(3, 'Arinas', '2025-08-28', 1, 1, 25000.00, 1),
-(4, 'Panela', '2025-10-22', 1, 2, 4000.00, 1);
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `productos`
 --
 
@@ -398,9 +371,9 @@ CREATE TABLE `proveedores` (
 INSERT INTO `proveedores` (`id_proveedor`, `Nit`, `Razon_social`, `Direccion`, `Celular`, `Telefono`, `Email`, `fo_ciudad`) VALUES
 (1, '900123456-4', 'Distribuidora Fruver S.A.S.', 'Calle 10 #15-20', '3111234567', '6041234567', 'contacto@fruver.com', 2),
 (2, '900234567-2', 'Lácteos del Norte Ltda.', 'Carrera 45 #22-34', '3122345678', '6042345677', 'ventas@lacteosnorte.com', 2),
-(3, '900345678-3', 'Verduras del Campo', 'Calle 23 #8-12', '3133456789', '6043456789', 'info@verdurascampo.com', 2),
 (4, '900456789-4', 'Huevos y Granja S.A.', 'Carrera 17 #30-15', '3144567890', '60445678989', 'huevos@granja.com', 3),
-(9, '10236542', 'sonsoneña', 'caale 3 sur # 25-07', '3022546913', '2556987', 'valery.c.m@hotmail.com', 1);
+(9, '10236542', 'sonsoneña', 'caale 3 sur # 25-07', '3022546913', '2556987', 'valery.c.m@hotmail.com', 1),
+(11, '900654489-4', 'Pollos Mario', 'Carrera 17 #30-15', '3025558978', '3508919', 'pollosmario.14@gmail,com', 25);
 
 -- --------------------------------------------------------
 
@@ -460,7 +433,6 @@ INSERT INTO `usuario` (`Id_usuario`, `Identificacion`, `Nombre`, `Direccion`, `C
 
 CREATE TABLE `ventas` (
   `id_ventas` int(11) NOT NULL,
-  `fo_pedidos` int(11) DEFAULT NULL,
   `iva` decimal(10,2) DEFAULT NULL,
   `total` decimal(10,2) DEFAULT NULL,
   `fo_usuario` int(11) NOT NULL,
@@ -474,22 +446,22 @@ CREATE TABLE `ventas` (
 -- Volcado de datos para la tabla `ventas`
 --
 
-INSERT INTO `ventas` (`id_ventas`, `fo_pedidos`, `iva`, `total`, `fo_usuario`, `fo_metodo_pago`, `fecha_venta`, `estado_venta`, `observaciones`) VALUES
-(3, NULL, 0.00, 4800.00, 1, 3, '2025-08-03', 'completado', 'Venta de Leche'),
-(4, NULL, 0.00, 7200.00, 1, 4, '2025-08-04', 'completado', 'Venta asociada a pedido de Queso'),
-(6, NULL, 0.00, 2200.00, 1, 1, '2025-08-05', 'anulada', 'Intento de venta cancelado'),
-(7, NULL, 0.00, 15000.00, 1, 2, '2025-08-06', 'completado', 'Venta desde pedido confirmado'),
-(8, NULL, 0.00, 8600.00, 1, 4, '2025-08-07', 'completado', 'Venta con pago en Nequi'),
-(9, NULL, 0.00, 6000.00, 1, 5, '2025-08-07', 'pendiente', 'Venta de productos variados'),
-(11, NULL, 2622.00, 13800.00, 1, 1, '2025-08-08', 'Completado', 'Sin observaciones'),
-(12, NULL, 3135.00, 16500.00, 1, 1, '2025-08-09', 'Completado', 'sin observaciones'),
-(16, NULL, 1387.00, 7300.00, 1, 1, '2025-08-10', 'Completado', 'Ninguna'),
-(17, NULL, 2071.00, 10900.00, 1, 1, '2025-08-10', 'Completado', 'Ninguna'),
-(29, NULL, 9500.00, 50000.00, 1, 5, '2025-08-10', 'Completado', 's'),
-(30, NULL, 380.00, 2000.00, 1, 3, '2025-08-10', 'Pendiente', 'n'),
-(31, NULL, 342.00, 1800.00, 1, 1, '2025-09-26', 'Completado', 'No'),
-(33, NULL, 3040.00, 16000.00, 1, 1, '2025-10-07', 'Completado', 'Venta para verificar el iva'),
-(34, NULL, 3135.00, 16500.00, 1, 1, '2025-10-22', 'Completado', 'Venta prueba');
+INSERT INTO `ventas` (`id_ventas`, `iva`, `total`, `fo_usuario`, `fo_metodo_pago`, `fecha_venta`, `estado_venta`, `observaciones`) VALUES
+(3, 0.00, 4800.00, 1, 3, '2025-08-03', 'completado', 'Venta de Leche'),
+(4, 0.00, 7200.00, 1, 4, '2025-08-04', 'completado', 'Venta asociada a pedido de Queso'),
+(6, 0.00, 2200.00, 1, 1, '2025-08-05', 'anulada', 'Intento de venta cancelado'),
+(7, 0.00, 15000.00, 1, 2, '2025-08-06', 'completado', 'Venta desde pedido confirmado'),
+(8, 0.00, 8600.00, 1, 4, '2025-08-07', 'completado', 'Venta con pago en Nequi'),
+(9, 0.00, 6000.00, 1, 5, '2025-08-07', 'pendiente', 'Venta de productos variados'),
+(11, 2622.00, 13800.00, 1, 1, '2025-08-08', 'Completado', 'Sin observaciones'),
+(12, 3135.00, 16500.00, 1, 1, '2025-08-09', 'Completado', 'sin observaciones'),
+(16, 1387.00, 7300.00, 1, 1, '2025-08-10', 'Completado', 'Ninguna'),
+(17, 2071.00, 10900.00, 1, 1, '2025-08-10', 'Completado', 'Ninguna'),
+(29, 9500.00, 50000.00, 1, 5, '2025-08-10', 'Completado', 's'),
+(30, 380.00, 2000.00, 1, 3, '2025-08-10', 'Pendiente', 'n'),
+(31, 342.00, 1800.00, 1, 1, '2025-09-26', 'Completado', 'No'),
+(33, 3040.00, 16000.00, 1, 1, '2025-10-07', 'Completado', 'Venta para verificar el iva'),
+(34, 3135.00, 16500.00, 1, 1, '2025-10-22', 'Completado', 'Venta prueba');
 
 --
 -- Índices para tablas volcadas
@@ -536,8 +508,7 @@ ALTER TABLE `compras`
 --
 ALTER TABLE `creditos`
   ADD PRIMARY KEY (`id_credito`),
-  ADD KEY `fo_cliente` (`fo_cliente`),
-  ADD KEY `fo_pedidos` (`fo_pedidos`);
+  ADD KEY `fo_cliente` (`fo_cliente`);
 
 --
 -- Indices de la tabla `departamento`
@@ -566,15 +537,6 @@ ALTER TABLE `detalle_venta`
 --
 ALTER TABLE `metodo_pago`
   ADD PRIMARY KEY (`id_metodo_pago`);
-
---
--- Indices de la tabla `pedidos`
---
-ALTER TABLE `pedidos`
-  ADD PRIMARY KEY (`id_pedidos`),
-  ADD KEY `fo_cliente` (`fo_cliente`),
-  ADD KEY `fo_metodo_pago` (`fo_metodo_pago`),
-  ADD KEY `fo_usuario` (`fo_usuario`);
 
 --
 -- Indices de la tabla `productos`
@@ -610,7 +572,6 @@ ALTER TABLE `usuario`
 --
 ALTER TABLE `ventas`
   ADD PRIMARY KEY (`id_ventas`),
-  ADD KEY `fo_pedidos` (`fo_pedidos`),
   ADD KEY `fo_usuario` (`fo_usuario`),
   ADD KEY `fo_metodo_pago` (`fo_metodo_pago`);
 
@@ -640,7 +601,7 @@ ALTER TABLE `ciudad`
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `compras`
@@ -652,7 +613,7 @@ ALTER TABLE `compras`
 -- AUTO_INCREMENT de la tabla `creditos`
 --
 ALTER TABLE `creditos`
-  MODIFY `id_credito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_credito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `departamento`
@@ -679,12 +640,6 @@ ALTER TABLE `metodo_pago`
   MODIFY `id_metodo_pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT de la tabla `pedidos`
---
-ALTER TABLE `pedidos`
-  MODIFY `id_pedidos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
@@ -694,7 +649,7 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
-  MODIFY `id_proveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_proveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `stock`
@@ -706,7 +661,7 @@ ALTER TABLE `stock`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `Id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `Id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `ventas`
@@ -747,8 +702,7 @@ ALTER TABLE `compras`
 -- Filtros para la tabla `creditos`
 --
 ALTER TABLE `creditos`
-  ADD CONSTRAINT `creditos_ibfk_1` FOREIGN KEY (`fo_cliente`) REFERENCES `cliente` (`id_cliente`),
-  ADD CONSTRAINT `creditos_ibfk_2` FOREIGN KEY (`fo_pedidos`) REFERENCES `pedidos` (`id_pedidos`);
+  ADD CONSTRAINT `creditos_ibfk_1` FOREIGN KEY (`fo_cliente`) REFERENCES `cliente` (`id_cliente`);
 
 --
 -- Filtros para la tabla `detalle_compra`
@@ -764,14 +718,6 @@ ALTER TABLE `detalle_compra`
 ALTER TABLE `detalle_venta`
   ADD CONSTRAINT `detalle_venta_ibfk_1` FOREIGN KEY (`fo_venta`) REFERENCES `ventas` (`id_ventas`),
   ADD CONSTRAINT `detalle_venta_ibfk_2` FOREIGN KEY (`fo_producto`) REFERENCES `productos` (`Id_productos`);
-
---
--- Filtros para la tabla `pedidos`
---
-ALTER TABLE `pedidos`
-  ADD CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`fo_cliente`) REFERENCES `cliente` (`id_cliente`),
-  ADD CONSTRAINT `pedidos_ibfk_2` FOREIGN KEY (`fo_metodo_pago`) REFERENCES `metodo_pago` (`id_metodo_pago`),
-  ADD CONSTRAINT `pedidos_ibfk_3` FOREIGN KEY (`fo_usuario`) REFERENCES `usuario` (`Id_usuario`);
 
 --
 -- Filtros para la tabla `productos`
@@ -798,7 +744,6 @@ ALTER TABLE `stock`
 -- Filtros para la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  ADD CONSTRAINT `ventas_ibfk_1` FOREIGN KEY (`fo_pedidos`) REFERENCES `pedidos` (`id_pedidos`),
   ADD CONSTRAINT `ventas_ibfk_2` FOREIGN KEY (`fo_usuario`) REFERENCES `usuario` (`Id_usuario`),
   ADD CONSTRAINT `ventas_ibfk_3` FOREIGN KEY (`fo_metodo_pago`) REFERENCES `metodo_pago` (`id_metodo_pago`);
 COMMIT;

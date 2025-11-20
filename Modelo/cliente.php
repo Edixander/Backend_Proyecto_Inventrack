@@ -20,7 +20,7 @@
          }
              return $vec;
         }
-            //http://localhost/Inventrack/backend/Controlador/cliente.php?control=consulta
+        
         public function eliminar($id) {
             $del = "DELETE FROM cliente WHERE id_cliente = $id";
             mysqli_query($this->conexion, $del);
@@ -52,18 +52,22 @@
         }
 
         public function filtro($valor) {
-            $filtro = "SELECT 
-            FROM cliente cl
-            
-            WHERE nombre LIKE '%$valor%' 
-            ORDER BY nombre";
-            $res = mysqli_query($this->conexion, $filtro);
-            $vec = [];
+    $filtro = "SELECT cl.*, ci.nombre_ciudad AS ciudad
+               FROM cliente cl
+               LEFT JOIN ciudad ci ON cl.fo_ciudad = ci.id_ciudad
+               WHERE cl.cedula LIKE '%$valor%' 
+                  OR cl.nombre LIKE '%$valor%'
+                  OR cl.email LIKE '%$valor%'
+               ORDER BY cl.nombre";
 
-            while($row = mysqli_fetch_assoc($res)) {
-                $vec [] = $row;
-            }
-            return $vec;
-        }
+    $res = mysqli_query($this->conexion, $filtro);
+    $vec = [];
+
+    while($row = mysqli_fetch_assoc($res)) {
+        $vec[] = $row;
+    }
+
+    return $vec;
+}
     }
 ?>
